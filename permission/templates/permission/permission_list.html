@@ -1,0 +1,42 @@
+{% load static %}
+<html>
+<head>
+  <title>Permission</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+</head>
+<body>
+  <div class="container">
+    <a href="/">Back</a><br>
+    {% if user.is_authenticated %}
+    <a class="btn btn-primary" href="/input_permission/">Input Permission</a><br><br>
+    {% endif %}
+    <table class="table" >
+      <tr>
+        <th>Employee</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Category</th>
+        <th></th>
+      </tr>
+      {% if permission|length == 0  %}
+      <tr>
+        <td  colspan="5" class="text-center">Data Masih Kosong</td>
+      </tr>
+      {% else %}
+      {%for x in permission%}
+      <tr>
+        <td>{{x.employee}}</td>
+        <td>{{x.start}}</td>
+        <td>{{x.end}}</td>
+        <td>{{x.category}}</td>
+        <td><a href="/delete_permission/{{x.id}}">X</a></td>
+      </tr>
+      {%endfor%}
+      {% endif %}
+    </table>
+  </div>
+</body>
+</html>

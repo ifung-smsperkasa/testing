@@ -1,0 +1,25 @@
+{% load static %}
+<html>
+<head>
+   <title>Permission</title>
+   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+   <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+   <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+</head>
+<body>
+  <div class="container">
+    <div class="jumbotron">
+      <h3>Tes</h3>
+    </div>
+  <a href="/category/">Category</a>
+  <a href="/permission/">Permission</a>
+
+  {% if user.is_authenticated %}
+  <p style="text-align:right;">Hello,{{ user.get_username }} <a href="/logouts/">Log out</a></p>
+  {% else %}
+  <p style="text-align:right;"><a href="/logins/">Login</a></p>
+  {% endif %}
+  </div>
+</body>
+</html>
