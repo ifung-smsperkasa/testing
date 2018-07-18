@@ -1,11 +1,5 @@
-{% load static %}
-<html>
-<head>
-  <title>Permission</title>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-  <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+{% extends 'permission/index.html' %}
+{% block content %}
   <style>
   body {font-family: Arial, Helvetica, sans-serif;}
 
@@ -51,10 +45,6 @@
     background-color: red;
   }
   </style>
-</head>
-<body>
-  <div class="container">
-    <a href="/permission/">Back</a>
     <h2>Permission Input</h2>
     <ul>
       <form action="/permission/" method="post" id="permission_form">
@@ -94,14 +84,13 @@
         </tr>
         {%for x in employee%}
         <tr>
-          <td id="employee_number"  ondblclick="clicked({{x.number}})">{{x.number}}</td>
+          <td id="employee_number"  onclick="clicked({{x.number}})">{{x.number}}</td>
           <td>{{x.user}}</td>
         </tr>
         {%endfor%}
       </table>
     </div>
 
-  </div>
   <script>
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
@@ -125,5 +114,4 @@
       modal.style.display = "none";
     }
   </script>
-</body>
-</html>
+{% endblock %}

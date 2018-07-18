@@ -1,17 +1,5 @@
-{% load static %}
-<html>
-<head>
-  <title>Permission</title>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-  <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="{% static 'css/blog.css' %}">
-</head>
-<body>
-  <div class="container">
-
-    <a href="/">&laquo; Back</a><br>
-
+{% extends 'permission/index.html' %}
+{% block content %}
     {% if user.is_authenticated and permission == True %}
       <a class="btn btn-primary" href="/input_category/">Input Category</a><br><br>
     {% endif %}
@@ -27,6 +15,4 @@
         </tr>
       {%endfor%}
     </table>
-  </div>
-</body>
-</html>
+{% endblock %}

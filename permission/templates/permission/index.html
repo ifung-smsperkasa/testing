@@ -9,17 +9,28 @@
 </head>
 <body>
   <div class="container">
-    <div class="jumbotron">
-      <h3>Tes</h3>
-    </div>
-  <a href="/category/">Category</a>
-  <a href="/permission/">Permission</a>
-
-  {% if user.is_authenticated %}
-  <p style="text-align:right;">Hello,{{ user.get_username }} <a href="/logouts/">Log out</a></p>
-  {% else %}
-  <p style="text-align:right;"><a href="/logins/">Login</a></p>
-  {% endif %}
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Pencatatan Izin</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="/category/">Category</a>
+          <li><a href="/permission/">Permission</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          {% if user.is_authenticated %}
+            <li><p style="text-align:right;">Hello,{{ user.get_username }} <a href="/logouts/">Log out</a></p></li>
+          {% else %}
+            <li><p style="text-align:right;"><a href="/logins/">Login</a></p></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+  {% block content %}
+    
+  {% endblock %}
   </div>
+
 </body>
 </html>
