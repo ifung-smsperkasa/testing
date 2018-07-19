@@ -1,6 +1,6 @@
 {% extends 'permission/index.html' %}
 {% block content %}
-    {% if user.is_authenticated and permission == True %}
+    {% if user.is_authenticated and perms.permission.add_category %}
       <a class="btn btn-primary" href="/input_category/">Input Category</a><br><br>
     {% endif %}
     <table class="table">

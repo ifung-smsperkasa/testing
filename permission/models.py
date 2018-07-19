@@ -19,7 +19,7 @@ class Employee(models.Model):
     def __str__(self):
         return str(self.number)
 
-class Permission(models.Model):
+class Perizinan(models.Model):
     employee = models.ForeignKey(Employee,default='0',related_name='employee')
     start = models.DateTimeField(default=timezone.now)
     end = models.DateTimeField(default=timezone.now)

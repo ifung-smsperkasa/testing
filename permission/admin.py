@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import Category, Employee, Permission
+from .models import Category, Employee, Perizinan
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
 admin.site.register(Category)
 admin.site.register(Employee)
-admin.site.register(Permission)
+admin.site.register(Perizinan)
 
 class EmployeeInline(admin.StackedInline):
     model = Employee

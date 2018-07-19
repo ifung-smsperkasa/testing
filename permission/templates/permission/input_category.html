@@ -2,7 +2,7 @@
 {% block content %}
     <h2>Category Create</h2>
     <ul>
-      <form action="/category/" method="post" id="category_form">
+      <form action="/category/" method="post" id="category_form" >
         {% csrf_token %}
         <table>
           <tr>
@@ -17,5 +17,6 @@
         <br/>
         <input type="submit"class="btn" value="Submit">
       </form>
+
     </ul>
 {% endblock %}
