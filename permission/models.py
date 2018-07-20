@@ -20,10 +20,10 @@ class Employee(models.Model):
         return str(self.number)
 
 class Perizinan(models.Model):
-    employee = models.ForeignKey(Employee,default='0',related_name='employee')
+    employee = models.ForeignKey(Employee,default='0',related_name='employee',on_delete=models.CASCADE)
     start = models.DateTimeField(default=timezone.now)
     end = models.DateTimeField(default=timezone.now)
-    category = models.ForeignKey(Category,default='none',related_name='category')
+    category = models.ForeignKey(Category,default='none',related_name='category',on_delete=models.CASCADE)
     reason = models.TextField()
 
     def __str__(self):

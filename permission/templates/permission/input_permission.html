@@ -47,9 +47,9 @@
   </style>
     <h2>Permission Input</h2>
     <ul>
-      <form action="/permission/" method="post" id="permission_form">
+      <form  method="post" id="permission_form">
         {% csrf_token %}
-        <label for="employee" class="col-sm-1">Employee </label>
+        <!-- <label for="employee" class="col-sm-1">Employee </label>
         <input type="text" id="employee" name="employee" onclick="myFunction()" readonly required>
         <br>
         <br>
@@ -65,7 +65,8 @@
         </select><br><br>
         <label for="reason" class="col-sm-1">Reason </label>
         <textarea id="reason" name="reason" form="permission_form" style="resize:none; height:50px;"></textarea><br>
-        <br>
+        <br> -->
+        {{form.as_p}}
         <input class="btn col-sm-1" id="submit" type="submit" value="OK">
       </form>
     </ul>

@@ -1,11 +1,13 @@
 {% extends 'permission/index.html' %}
 {% block content %}
-    <form method="POST" action="/next_view/">
-      {% csrf_token %}
-      <label>Username</label>
+      <form method="POST" >
+        {% csrf_token %}
+      <!-- <label>Username</label>
       <input type="text" name="username" id="username" required>
       <label>Password</label>
       <input type="password" name="password" id="password" required>
+      <input class="btn btn-primary" type="submit" value="submit"> -->
+      {{form}}
       <input class="btn btn-primary" type="submit" value="submit">
     </form>
 {% endblock %}
