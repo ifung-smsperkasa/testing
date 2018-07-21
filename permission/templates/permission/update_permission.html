@@ -1,0 +1,119 @@
+{% extends 'permission/index.html' %}
+{% block content %}
+  <style>
+  body {font-family: Arial, Helvetica, sans-serif;}
+
+  /* The Modal (background) */
+  .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  /* Modal Content */
+  .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+  }
+
+  /* The Close Button */
+  .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+  }
+  #employee_number:hover{
+    background-color: red;
+  }
+  </style>
+    <h2>Permission Input</h2>
+    <ul>
+      <form  method="post" id="update_form">
+        {% csrf_token %}
+        <!-- <label for="employee" class="col-sm-1">Employee </label>
+        <input type="text" id="employee" name="employee" onclick="myFunction()" readonly required>
+        <br>
+        <br>
+        <label for="start" class="col-sm-1">Start </label>
+        <input id="start_date" type="datetime-local" name="start_date" required><br><br>
+        <label for="end" class="col-sm-1">End </label>
+        <input id="end_date" type="datetime-local" name="end_date" required><br><br>
+        <label for="category" class="col-sm-1">Category </label>
+        <select id="category" name="category" >
+          {%for x in category%}
+          <option>{{x.name}}</option>
+          {%endfor%}
+        </select><br><br>
+        <label for="reason" class="col-sm-1">Reason </label>
+        <textarea id="reason" name="reason" form="permission_form" style="resize:none; height:50px;"></textarea><br>
+        <br> -->
+        {{form.as_p}}
+        <input class="btn col-sm-1" id="submit" type="submit" value="OK">
+      </form>
+    </ul>
+  </div>
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Employee List</h3>
+      <table class="table" >
+        <tr>
+          <th>Number</th>
+          <th>Name</th>
+
+        </tr>
+        {%for x in employee%}
+        <tr>
+          <td id="employee_number"  onclick="clicked({{x.number}})">{{x.number}}</td>
+          <td>{{x.user}}</td>
+        </tr>
+        {%endfor%}
+      </table>
+
+    </div>
+
+  <script>
+    var modal = document.getElementById('myModal');
+    var span = document.getElementsByClassName("close")[0];
+    function myFunction(number) {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    function clicked(number) {
+      document.getElementById('employee').value = number;
+      modal.style.display = "none";
+    }
+  </script>
+{% endblock %}

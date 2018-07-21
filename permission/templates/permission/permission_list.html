@@ -18,12 +18,18 @@
       {% else %}
       {%for x in object_list %}
       <tr>
-        <td>{{x.employee}}</td>
+        <td><a href="{% url 'detail_permission' x.id %}">{{x.employee}}</a></td>
         <td>{{x.start}}</td>
         <td>{{x.end}}</td>
         <td>{{x.category}}</td>
         {% if user.is_superuser %}
-        <td><a onclick="return confirm('Are you sure you want to delete this?')" href="/delete_permission/{{x.id}}">X</a></td>
+        <td>
+          <a href="/update_permission/{{x.id}}" class="btn btn-default" style="float:left;">Update</a>
+          <form method="post" action="/delete_permission/{{x.id}}" style="float:left; margin-left:10%;">{%csrf_token%}
+            <input type="hidden" name="perizinan_id" value="{{x.id}}">
+            <button type="submit" class="btn btn-default" >X</button>
+          </form>
+        </td>
         {% endif %}
       </tr>
       {%endfor%}

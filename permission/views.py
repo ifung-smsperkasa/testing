@@ -30,6 +30,7 @@ class ListCategoryView(generic.ListView):
 
 class ListPerizinanView(generic.ListView):
     template_name ='permission/permission_list.html'
+
     def get_queryset(self):
         return Perizinan.objects.all()
 
@@ -37,6 +38,7 @@ class InputCategory(PermissionRequiredMixin , generic.CreateView):
     permission_required = 'permission.add_category'
     form_class = CategoryForm
     template_name = 'permission/input_category.html'
+
     def form_valid(self,form):
         self.object = form.save()
         return redirect('/category/')
@@ -45,24 +47,44 @@ class InputPerizinan(PermissionRequiredMixin,generic.CreateView):
     permission_required = 'permission.add_perizinan'
     form_class = PermissionForm
     template_name = 'permission/input_permission.html'
+
     def form_valid(self,form):
         self.object = form.save()
         return redirect('/permission/')
 
 class Login_(LoginView):
     success_url = '/'
+
     def form_valid(self, form):
         login(self.request, form.get_user())
         return redirect('/')
 
+class UpdatePerizinan(generic.UpdateView):
+    model = Perizinan
+    form_class = PermissionForm
+    template_name = 'permission/input_permission.html'
+    success_url = '/permission/'
+
+class DeletePerizinan(generic.DeleteView):
+    model = Perizinan
+    success_url = '/permission/'
+
+class DetailEmployee(generic.DetailView):
+    model = Perizinan
+    template_name='permission/detail_employee.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['id_perizinan'] = self.kwargs['pk']
+        data['number'] = Perizinan.objects.get(pk=data['id_perizinan'])
+        data['user_employee'] = Employee.objects.get(number=str(data['number'])).user
+        data['usernamez'] = User.objects.get(username=data['user_employee']).username
+        data['email'] = User.objects.get(username=data['user_employee']).email
+        return data
+
 def logouts(request):
     logout(request)
     return redirect('/')
-
-def delete_permission(request,id):
-    del_permission = Perizinan.objects.get(id=id)
-    del_permission.delete()
-    return redirect('/permission/')
 
 
 # def permission_list(request):
