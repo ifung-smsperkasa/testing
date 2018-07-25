@@ -12,6 +12,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 class Employee(models.Model):
     number = models.IntegerField()
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
@@ -19,11 +20,12 @@ class Employee(models.Model):
     def __str__(self):
         return str(self.number)
 
+
 class Perizinan(models.Model):
-    employee = models.ForeignKey(Employee,default='0',related_name='employee',on_delete=models.CASCADE)
+    employee = models.ForeignKey(User,related_name='perizinan',on_delete=models.CASCADE)
     start = models.DateTimeField(default=timezone.now)
     end = models.DateTimeField(default=timezone.now)
-    category = models.ForeignKey(Category,default='none',related_name='category',on_delete=models.CASCADE)
+    category = models.ForeignKey(Category,default='none',related_name='perizinan',on_delete=models.CASCADE)
     reason = models.TextField()
 
     def __str__(self):

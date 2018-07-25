@@ -1,15 +1,19 @@
 from django.conf.urls import url
-from . import views
+from permission import views
+from django.conf.urls import url
+from rest_framework_swagger.views import get_swagger_view
+from django.conf.urls import include
+from rest_framework.routers import DefaultRouter
+from .views import PerizinanViewSet,CategoryViewSet
 
+router = DefaultRouter()
+router.register('perizinan',PerizinanViewSet)
+router.register('category',CategoryViewSet)
+schema_view = get_swagger_view(title='Perizinan',url='/')
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    url(r'^category/$', views.ListCategoryView.as_view(), name='category_list'),
-    url(r'^input_category/$', views.InputCategory.as_view(), name='input_category'),
-    url(r'^permission/$', views.ListPerizinanView.as_view(), name='permission_list'),
-    url(r'^input_permission/$', views.InputPerizinan.as_view(), name='input_permission'),
-    url(r'^delete_permission/?(?P<pk>\d+)?/?$', views.DeletePerizinan.as_view(), name='delete_permission'),
-    url(r'^logins/$',views.Login_.as_view(template_name = 'permission/login.html'), name='logins'),
-    url(r'^logouts/$',views.logouts, name='logouts'),
-    url(r'^update_permission/?(?P<pk>\d+)?/?$', views.UpdatePerizinan.as_view(),name='update_permission'),
-    url(r'^detail_permission/?(?P<pk>\d+)?/?$', views.DetailEmployee.as_view(),name='detail_permission'),
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls')),
+    # url(r'^perizinan/$', views.PerizinanList.as_view()),
+    # url(r'^perizinan/(?P<pk>[0-9]+)/$', views.PerizinanDetail.as_view()),
+    url(r'^docs/$', schema_view),
 ]

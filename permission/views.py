@@ -1,143 +1,93 @@
-from django.shortcuts import render
-from .models import Category,Perizinan,Employee
-from django.shortcuts import redirect
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
-from django.contrib.auth.models import Permission,User
-from django.contrib.auth.decorators import permission_required
-from .formz import CategoryForm, PermissionForm
-from django.views import generic
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponseRedirect
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.http import Http404
-from django.utils.decorators import method_decorator
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.mixins import AccessMixin
-from django.contrib.auth.views import LogoutView
+from rest_framework import status
+from rest_framework.response import Response
+from permission.models import Category,Perizinan
+from django.contrib.auth.models import User
+from permission.serializer import PerizinanSerializer,CustomSerializer,CategorySerializer
+from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import generics, viewsets
+from rest_framework import mixins
 
-class IndexView(generic.TemplateView):
-    template_name ='permission/index.html'
+class PerizinanViewSet(mixins.CreateModelMixin,
+                       mixins.ListModelMixin,
+                       mixins.UpdateModelMixin,
+                       mixins.RetrieveModelMixin,
+                       mixins.DestroyModelMixin,
+                       viewsets.GenericViewSet):
+       permission_classes = (permissions.IsAuthenticated,)
+       serializer_class=PerizinanSerializer
+       queryset = Perizinan.objects.all()
 
-class ListCategoryView(generic.ListView):
-    template_name ='permission/category_list.html'
+class CategoryViewSet(mixins.CreateModelMixin,
+                       mixins.ListModelMixin,
+                       mixins.UpdateModelMixin,
+                       mixins.RetrieveModelMixin,
+                       mixins.DestroyModelMixin,
+                       viewsets.GenericViewSet):
+       permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+       serializer_class=CategorySerializer
+       queryset = Category.objects.all()
 
-    def get_queryset(self):
-        return Category.objects.all()
-
-class ListPerizinanView(generic.ListView):
-    template_name ='permission/permission_list.html'
-
-    def get_queryset(self):
-        return Perizinan.objects.all()
-
-class InputCategory(PermissionRequiredMixin , generic.CreateView):
-    permission_required = 'permission.add_category'
-    form_class = CategoryForm
-    template_name = 'permission/input_category.html'
-
-    def form_valid(self,form):
-        self.object = form.save()
-        return redirect('/category/')
-
-class InputPerizinan(PermissionRequiredMixin,generic.CreateView):
-    permission_required = 'permission.add_perizinan'
-    form_class = PermissionForm
-    template_name = 'permission/input_permission.html'
-
-    def form_valid(self,form):
-        self.object = form.save()
-        return redirect('/permission/')
-
-class Login_(LoginView):
-    success_url = '/'
-
-    def form_valid(self, form):
-        login(self.request, form.get_user())
-        return redirect('/')
-
-class UpdatePerizinan(generic.UpdateView):
-    model = Perizinan
-    form_class = PermissionForm
-    template_name = 'permission/input_permission.html'
-    success_url = '/permission/'
-
-class DeletePerizinan(generic.DeleteView):
-    model = Perizinan
-    success_url = '/permission/'
-
-class DetailEmployee(generic.DetailView):
-    model = Perizinan
-    template_name='permission/detail_employee.html'
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data['id_perizinan'] = self.kwargs['pk']
-        data['number'] = Perizinan.objects.get(pk=data['id_perizinan'])
-        data['user_employee'] = Employee.objects.get(number=str(data['number'])).user
-        data['usernamez'] = User.objects.get(username=data['user_employee']).username
-        data['email'] = User.objects.get(username=data['user_employee']).email
-        return data
-
-def logouts(request):
-    logout(request)
-    return redirect('/')
-
-
-# def permission_list(request):
-#     if request.method == 'POST':
-#         employee = Employee.objects.get(number=request.POST.get('employee'))
-#         start = request.POST.get('start_date')
-#         end = request.POST.get('end_date')
-#         category = Category.objects.get(name=request.POST.get('category'))
-#         reason = request.POST.get('reason')
-#         permission = Perizinan(employee=employee,start=start,end=end,category=category,reason=reason)
-#         permission.save()
-#         return redirect('/permission/')
+# class PerizinanList(generics.ListCreateAPIView):
 #
-#     permission = Perizinan.objects.all()
-
-# def category_list(request):
-#     permission = True;
-#     if not request.user.username.endswith('admin'):
-#         permission = False;
-#     if request.method == 'POST':
-#         category_name = request.POST.get('category_name')
-#         category_note = request.POST.get('category_note')
-#         categorys = Category(name=category_name,note=category_note)
-#         categorys.save()
-#         return redirect('/category/')
-#     category = Category.objects.all()
-#     return render(request,'permission/category_list.html',{'category':category,'permission':permission})
-
-# def input_category(request):
-#     if request.user.has_perm('permission.add_category'):
-#         return render(request,'permission/input_category.html',{})
-#     else:
-#         return redirect('/category/')
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+#     serializer_class = PerizinanSerializer
 #
-#     return render(request,'permission/permission_list.html',{'permission':permission})
-
-# @login_required(login_url='/logins/')
-# def input_permission(request):
+#     def list(self, request):
+#         # Note the use of `get_queryset()` instead of `self.queryset`
+#         queryset = Perizinan.objects.filter(pk=24)
+#         serializer = PerizinanSerializer(queryset, many=True)
+#         return Response(serializer.data)
 #
-#     if request.user.has_perm('permission.add_perizinan'):
-#
-#         employee = Employee.objects.all()
-#         category = Category.objects.all()
-#         return render(request,'permission/input_permission.html',{'category':category,'employee':employee})
-#     else:
-#         return redirect('/permission/')
+# class PerizinanDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Perizinan.objects.all()
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+#     serializer_class = PerizinanSerializer
 
-# def next_view(request):
-#     username = request.POST.get('username')
-#     password = request.POST.get('password')
-#     user = authenticate(username=username, password=password)
-#     if user is not None:
-#         login(request, user)
-#         return redirect('/')
-#     else:
-#         return redirect('/logins/')
+# @api_view(['GET', 'POST'])
+# @permission_classes((permissions.AllowAny,))
+# def perizinan_list(request):
+#     """
+#     List all code perizinan
+#     """
+#     if request.method == 'GET':
+#         # user = User.objects.get(pk=1)
+#         serializer = CustomSerializer(data={'perizinan':{'id':1,'user':{'firstname':'tes','lastname':'tes','email':'tess@email.com '},'start':'2018-07-21T11:11:30+07:00','end':'2018-07-21T11:11:30+07:00','category':{'id':1,'name':'tes','note':'sss'},'reason':'sss'}})
+#         serializer.is_valid()
+#         print(serializer.data)
+#         return Response(serializer.data)
+#     #Create code perizinan
+#     elif request.method == 'POST':
+#
+#         serializer = PerizinanSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+#
+# @api_view(['GET', 'PUT', 'DELETE'])
+# @permission_classes((permissions.AllowAny,))
+# def perizinan_detail(request, pk):
+#     """
+#     Retrieve, update or delete a code perizinan.
+#     """
+#     try:
+#         perizinan = Perizinan.objects.get(pk=pk)
+#     except Perizinan.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+#
+#     if request.method == 'GET':
+#         serializer = PerizinanSerializer(perizinan)
+#         return Response(serializer.data)
+#
+#     elif request.method == 'PUT':
+#
+#         serializer = PerizinanSerializer(perizinan, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     elif request.method == 'DELETE':
+#         perizinan.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
